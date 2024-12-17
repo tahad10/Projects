@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Simulation</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      background-color: #161616;
+      margin: 0;
+      padding: 0;
+    }
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #222;
+      padding: 10px 20px;
+      border-bottom: 4px solid #444;
+      gap: 10px;
+    }
+    .team {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .team span {
+      font-size: 36px;
+      font-weight: bold;
+      color: #ff0000;
+    }
+    .time {
+      font-size: 28px;
+      font-weight: bold;
+      color: #fdfdfd;
+      background-color: #444;
+      padding: 5px 15px;
+      border-radius: 5px;
+    }
+    canvas {
+      display: block;
+      margin: 20px auto 0 auto;
+      background-color: #099939; /* Spielfeld-Grün */
+    }
+  </style>
+</head>
+<body>
+  <div class="scoreboard">
+    <div class="team">Real Madrid<span id="scoreHome">0</span></div>
+    <div class="time" id="time">0:00</div>
+    <div class="team"><span id="scoreAway">0</span>Barcelona</div>
+  </div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+  <script>
+    // Canvas und Kontext
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Variablen für Tor, Bälle und Punktestand
+    const GOAL_WIDTH = 100;
+    const GOAL_HEIGHT = 20;
+    const BALL_RADIUS = 15;
+
+    const goal = { x: canvas.width / 2 - GOAL_WIDTH / 2, y: 0, width: GOAL_WIDTH, height: GOAL_HEIGHT };
+
+    let ballHome = { x: canvas.width / 2 - 60, y: canvas.height / 2, vx: 3, vy: 2 };
+    let ballAway = { x: canvas.width / 2 + 60, y: canvas.height / 2, vx: -3, vy: -2 };
+
+    let scoreHome = 0;
+    let scoreAway = 0;
+    let timeElapsed = 0;
+    let gameRunning = true;
+
+    const MIN_SPEED = 2;
+    const MAX_SPEED = 6;
+
+    // Toranimation
+    let goalAnimationActive = false;
+    let goalAnimationTime = 0;
+    const GOAL_ANIMATION_DURATION = 60;
+
+    // Spielende Animation
+    let gameEndAnimationActive = false;
+    let winnerText = "";
+
+    // Konfetti
+    const confetti = [];
+    const CONFETTI_COUNT = 100;
+    let confettiActive = false;
+
+    function createConfetti() {
+        confetti.length = 0; // Vorheriges Konfetti löschen
+        for (let i = 0; i < CONFETTI_COUNT; i++) {
+            confetti.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 6 + 2,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                speedY: Math.random() * 3 + 2,
+                speedX: Math.random() * 2 - 1,
+            });
+        }
+    }
+
+    function drawConfetti() {
+        confetti.forEach((piece) => {
+            ctx.fillStyle = piece.color;
+            ctx.beginPath();
+            ctx.arc(piece.x, piece.y, piece.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+
+            // Bewegung
+            piece.x += piece.speedX;
+            piece.y += piece.speedY;
+
+            // Wiederholen, wenn es unten aus dem Bild fällt
+            if (piece.y > canvas.height) {
+                piece.y = -piece.size;
+                piece.x = Math.random() * canvas.width;
+            }
+        });
+    }
+
+    function triggerGoalAnimation() {
+        goalAnimationActive = true;
+        confettiActive = true; // Konfetti aktivieren
+        goalAnimationTime = 0;
+        createConfetti();
+    }
+
+    function triggerGameEndAnimation() {
+        gameEndAnimationActive = true;
+
+        // Gewinnertext bestimmen
+        if (scoreHome > scoreAway) {
+            winnerText = "Winner: Real Madrid";
+        } else if (scoreAway > scoreHome) {
+            winnerText = "Winner: Barcelona";
+        } else {
+            winnerText = "Draw!";
+        }
+    }
+
+    function drawGoalAnimation() {
+        if (!goalAnimationActive) return;
+
+        // Zeichne den Text in der Mitte des Spielfelds
+        ctx.font = "48px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText("GOOOOOL!", canvas.width / 2, canvas.height / 2);
+
+        // Zeichne den schwarzen Rahmen
+        const textWidth = ctx.measureText("GOOOOOL!").width;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(
+            canvas.width / 2 - textWidth / 2 - 20,
+            canvas.height / 2 - 40,
+            textWidth + 40,
+            80
+        );
+
+        drawConfetti(); // Konfetti zeichnen während der Toranimation
+
+        goalAnimationTime++;
+        if (goalAnimationTime >= GOAL_ANIMATION_DURATION) {
+            goalAnimationActive = false; // Toranimation beenden
+            confettiActive = false; // Konfetti beenden
+        }
+    }
+
+    function drawGameEndAnimation() {
+        if (!gameEndAnimationActive) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Hintergrundfarbe
+        ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Endstand anzeigen
+        ctx.font = "48px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "white";
+        ctx.fillText(
+            `Real Madrid ${scoreHome} : ${scoreAway} Barcelona`,
+            canvas.width / 2,
+            canvas.height / 2 - 40
+        );
+
+        // Gewinner anzeigen
+        ctx.font = "36px Arial";
+        ctx.fillText(winnerText, canvas.width / 2, canvas.height / 2 + 40);
+    }
+
+    function adjustSpeed(ball) {
+        const adjustment = Math.random() * 0.5 - 0.25;
+        ball.vx += adjustment * Math.sign(ball.vx);
+        ball.vy += adjustment * Math.sign(ball.vy);
+
+        ball.vx = Math.max(MIN_SPEED, Math.min(MAX_SPEED, Math.abs(ball.vx))) * Math.sign(ball.vx);
+        ball.vy = Math.max(MIN_SPEED, Math.min(MAX_SPEED, Math.abs(ball.vy))) * Math.sign(ball.vy);
+    }
+
+    function moveBall(ball) {
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        if (ball.x - BALL_RADIUS <= 0 || ball.x + BALL_RADIUS >= canvas.width) {
+            ball.vx *= -1;
+            adjustSpeed(ball);
+        }
+
+        if (ball.y + BALL_RADIUS >= canvas.height) {
+            ball.vy *= -1;
+            adjustSpeed(ball);
+        }
+
+        if (ball.y - BALL_RADIUS <= 0) {
+            ball.vy *= -1;
+            adjustSpeed(ball);
+        }
+    }
+
+    function checkGoal(ball, team) {
+        if (
+            ball.y - BALL_RADIUS <= goal.y + goal.height &&
+            ball.x >= goal.x &&
+            ball.x <= goal.x + goal.width
+        ) {
+            if (team === "home") {
+                scoreHome++;
+            } else if (team === "away") {
+                scoreAway++;
+            }
+            triggerGoalAnimation();
+            resetBall(ball, team);
+        }
+    }
+
+    function resetBall(ball, team) {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
+        ball.vx = team === "home" ? 3 : -3;
+        ball.vy = team === "home" ? 2 : -2;
+    }
+
+    function drawGoal(goal) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(goal.x, goal.y, goal.width, goal.height);
+    }
+
+    function drawBall(ball, color) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawField() {
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, Math.PI * 2);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.rect(canvas.width / 2 - 150, 0, 300, 120);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    function updateScore() {
+        document.getElementById("scoreHome").innerText = scoreHome;
+        document.getElementById("scoreAway").innerText = scoreAway;
+    }
+
+    function gameLoop() {
+        if (gameEndAnimationActive) {
+            drawGameEndAnimation();
+            return; // Kein weiteres Update mehr, wenn das Spiel beendet ist
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawField();
+        drawGoal(goal);
+
+        moveBall(ballHome);
+        moveBall(ballAway);
+
+        checkGoal(ballHome, "home");
+        checkGoal(ballAway, "away");
+
+        drawBall(ballHome, "white");
+        drawBall(ballAway, "darkred");
+
+        if (confettiActive) drawConfetti(); // Konfetti bei aktiver Animation zeichnen
+
+        drawGoalAnimation();
+
+        updateScore();
+
+        if (timeElapsed < 90 * 60) {
+            timeElapsed++;
+            const minutes = Math.floor(timeElapsed / 60);
+            const seconds = timeElapsed % 60;
+            document.getElementById("time").innerText = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+        } else {
+            gameRunning = false;
+            triggerGameEndAnimation(); // Spielende Animation starten
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+</script>
+
+
+
+</body>
+</html>
