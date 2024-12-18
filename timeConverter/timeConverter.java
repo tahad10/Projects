@@ -1,5 +1,3 @@
-package timeConverter;
-
 import java.util.Scanner;
 
 public class timeConverter {
