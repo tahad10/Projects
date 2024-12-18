@@ -1,7 +1,5 @@
 # Dice Projects
 
----
-
 ## Simple Java Dice
 This project is a simple console-based program that simulates a dice roll. The programm generates a random number between 1 and 6 to simulate the roll od a dice.
 
