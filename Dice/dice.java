@@ -1,4 +1,3 @@
-package Dice;
 import java.util.Random;
 
 public class dice {
@@ -7,10 +6,8 @@ public class dice {
      * @param args
      */
     public static void main(String[] args) {
-        //for (int i = 0; i < 10; i++) {
-            Random random = new Random();
-            int dice = random.nextInt(6) + 1;
-            System.out.println(dice);
-       // }
+        Random random = new Random();
+        int dice = random.nextInt(6) + 1;
+        System.out.println(dice);
     }
 }
