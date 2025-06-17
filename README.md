@@ -8,7 +8,8 @@ This repository contains a collection of simple projects implemented im various 
 4. [Simple Calculator](SimpleCalculator): A console-based calculator implemented in Java.
 5. [Time Converter: Days to Seconds](timeConverter): A console-based time converter implemented in Java. It converts a given number of days into seconds.
 6. [Library Management System (Java)](LibraryManagementSystem):  A console-based Java application that simulates core functionality of a library. This is an **incomplete but structured version** of a university project, focused on practicing object-oriented programming, file handling (CSV import), and simple user interaction via console.
-
+7. [Airport Management System](AirportManagementSystem): A full-stack project with backend powered by Spring Boot and frontend built using Vue.js. The system will manage flights, passengers, bookings, and staff operations.
+   
 ---
 ## Future Development
 These projects are just the beginning and serve as foundational examples. They are designed to be expanded with new features and improvements, allowing for continuous learning and innovation.
