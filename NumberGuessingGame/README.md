@@ -5,7 +5,7 @@ This project is a simple and interactive number guessing game built with HTML, C
 ## 🚀 Live Demo
 
 Test your luck and logic here:
-👉 [Live Demo]()
+👉 [Live Demo](https://guessnumber-td.netlify.app/)
 
 ## ✨ Features
 
