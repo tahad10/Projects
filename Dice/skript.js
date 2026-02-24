@@ -111,6 +111,9 @@ function rollDice() {
 // Klick-Ereignis für das Würfeln
 window.addEventListener('click', rollDice);
 
+// Touch-Ereignis (Handy)
+window.addEventListener('touchstart', rollDice, { passive: true });
+
 // Animationsloop
 function animate() {
     requestAnimationFrame(animate);
