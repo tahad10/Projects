@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Number guessing game</title>
+
+    <!-- PWA & iOS OPTIMIERUNG -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Guess App">
+
+    <!-- App Icon (Verlinkung für den Home-Bildschirm) -->
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JunusErgin/fast-ui@latest/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.1) 0px, transparent 50%);
+            color: white;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+        }
+
+        /* Zentrierter Container für Desktop und Mobile */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            padding: 20px;
+            padding-top: 10vh; /* Schiebt den Inhalt um 10% der Bildschirmhöhe nach unten */
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        input[type="number"] {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input[type="number"]:focus {
+            border-color: #3b82f6;
+            outline: none;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Chrome, Safari, Edge, Opera: Pfeile entfernen */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .btn-guess {
+            background: linear-gradient(135deg, #0800f4 0%, #0055ff 100%);
+            color: #f6ff00;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn-guess:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-guess:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.75rem;
+            opacity: 0.4;
+            letter-spacing: 0.02em;
+        }
+
+        /* Animation für falsche Antworten */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+        }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+    </style>
+    </style>
+</head>
+<body>
+    <header>
+        <img src="LogoTD.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+        <span>Guess</span>
+    </header>
+
+    <main class="glass-card flex flex-col items-center gap-6 mt-12">
+        <h1 id="headline" class="text-3xl font-bold text-center leading-tight">Guess the Number!</h1>
+        
+        <div class="bg-blue-500/10 px-4 py-2 rounded-full border border-blue-500/20">
+            <h2 id="displayTries" class="text-blue-400 font-medium">Attempts: 0</h2>
+        </div>
+
+        <form onsubmit="guessTheNumber(); return false;" class="w-full flex flex-col gap-4">
+            <input 
+                id="myNumber" 
+                type="number" 
+                required 
+                placeholder="0 - 100"
+                class="w-full py-4 rounded-xl"
+            >
+            <button class="btn-guess w-full py-4 rounded-xl text-xl shadow-lg">
+                Guess!
+            </button>
+        </form>
+    </main>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+</body>
+</html>
