@@ -1,11 +1,33 @@
-# Projects
+# 📂 Project Overview
 
-This repository contains a collection of simple projects implemented im various programming languages.
+Below you will find a curated list of my projects. You can explore each one by navigating to its respective folder.
 
 ---
 
-1. [Dice Simulator](Dice): Random number generator simulation using dice.
-2. [Football Simulation Game](Fußballspiel): A browser-based football simulation game using HTML, CSS, and JavaScript.
-3. [Number guessing game](Number%20guessing%20game): An interactive number guessing game built with HTML, CSS, and JavaScript. Created with a YouTube tutorial.
-4. [Simple Calculator](SimpleCalculator): A console-based calculator implemented in Java.
-5. [Unity Game](UnityGame): Unity-based football simulation game where teams compete against each other.
+## [🎲 Dice Simulator](Dice)
+
+A high-performance 3D Dice Roller built with Three.js.
+
+- Highlights: PWA-ready, realistic physics, and interactive raycasting control.
+- Tech Stack: HTML, Three.js, CSS.
+
+## [⚽ Football Simulation](FootballSimulationGame)
+
+A dynamic 2D Football Match Simulation using a custom-built physics engine.
+
+- Highlights: Automated gameplay, particle-based confetti effects, and a live match clock.
+- Tech Stack: HTML Canvas, JavaScript, CSS.
+
+## [🔢 Number Guessing Game](NumberGuessingGame)
+
+An elegant Zahlenraten-Game with a sleek glassmorphism interface.
+
+- Highlights: Intelligent feedback system, victory celebrations, and fully responsive layout.
+- Tech Stack: JavaScript, CSS, JS-Confetti.
+
+## [🎮 Unity Game](UnityGame)
+
+A football simulation developed in the Unity Engine.
+
+- Highlights: Complex AI-driven team competition and 3D environment.
+- Tech Stack: C#, Unity.
