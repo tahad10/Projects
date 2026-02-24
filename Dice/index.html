@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Würfel</title>
+
+    <!-- 1. PWA & iOS OPTIMIERUNG -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dice App">
+
+    <link rel="apple-touch-icon" href="LogoApp.png">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JunusErgin/fast-ui@latest/style.css">
     <style>
         body {
@@ -13,18 +21,44 @@
             align-items: center;
             height: 100vh;
         }
+
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(18, 24, 38, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Erzeugt den Abstand zwischen Logo und Dice */
+        }
+
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
         canvas {
             display: block;
         }
+
         footer {
             text-align: center;
             width: 30%; /* Der Footer nimmt die gesamte Breite ein */
-            background-color: none; /* Halbtransparenter schwarzer Hintergrund */
+            background-color: rgba(0, 0, 0, 0.5); /* Halbtransparenter schwarzer Hintergrund */
             color: white;
             padding: 8px;
             position: absolute; /* Absolute Positionierung */
             bottom: 0; /* Immer am unteren Rand */
         }
+        
         h1 {
             text-align: center;
             position: absolute;
@@ -33,13 +67,11 @@
     </style>
 </head>
 <body>
-    <header>Dice</header>
-    <h1>Tippe auf den Würfel!</h1>
+    <header>
+        <img src="LogoTD.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+        <span>Dice</span>
+    </header>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="skript.js"></script>
-    <footer>
-        <p>Code von [Taha Darende] | © 2024</p>
-      </footer>
-      
 </body>
 </html>
