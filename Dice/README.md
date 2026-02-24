@@ -1,39 +1,56 @@
-# Dice Projects
+# Dice Project
 
-## Simple Java Dice
-This project is a simple console-based program that simulates a dice roll. The programm generates a random number between 1 and 6 to simulate the roll od a dice.
+## 🎲 3D Dice App
 
-### Features
-- Generates a random number between 1 and 6.
-- Dimple implementation using Java's `Random` class.
+A modern, web-based 3D dice application built with Three.js. The app is optimized as a Progressive Web App (PWA), allowing it to be installed on your smartphone like a native application.
 
-### How to Run
-1. Clone the repository or download the code.
-2. Ensure you have the Java Development Kit (JDK) installed on your system.
-3. Compile the code using the following command:
-   ```bash
-   javac dice.java
-   ```
-4. Run the program using:
-    ```bash
-    java dice
-    ```
----
+***
 
-## 3D Dice in HTML/JavaScript
-This project is a web-based dice roller that uses HTML, CSS, and JavaScript to create a 3D dice that rolls when clicked.
+### 🚀 Live Demo
 
-### Features
-- 3D dice animation.
-- Random number generation on dice roll.
-- Realistic rotation animation before the dice lands on the rolled number.
-- Custom dice faces with red backgrounds and white dots.
+You can try out the app directly here:
+👉 [Demo Dice](https://dice-td.netlify.app/)
 
-### How to Run
-1. Clone the repository or download the code.
-2. Open the `index.html` file in a web browser.
-3. Click on the dice to roll it.
+***
 
-### Acknowledgements
-- This project was developed with the assistance of ChatGPT by OpenAI.
-- Uses Three.js for 3D rendering.
+### ✨ Features
+
+- Realistic 3D Animation: Smooth rotations and landings powered by the Three.js engine.
+- Interactive Control: Roll the dice by clicking or touching the dice object directly.
+- PWA Support: Can be added to the Home Screen on iOS and Android (Full-screen mode, no browser UI).
+- Modern UI: Dark-themed design with a glassmorphism header and fluid transitions.
+- Responsive Design: Optimized for smartphones, tablets, and desktops.
+
+***
+
+### 🛠 Technologies
+
+- Three.js - 3D Rendering
+- CSS - Styling & Layout
+- HTML
+
+***
+
+### 📱 Installation (Mobile)
+
+To use the dice as an app on your iPhone or Android device:
+
+- Open the live link in your mobile browser.
+- Tap the Share icon (square with an arrow pointing up).
+- Select "Add to Home Screen".
+- Launch the app directly from your home screen icon.
+
+***
+
+### 📖 Local Setup
+
+1. Clone the repository
+2. Open the index.html file in any modern web browser.
+
+***
+
+### 📄 License
+
+This project is licensed under the MIT License.
+
+© 2024 Taha Darende
