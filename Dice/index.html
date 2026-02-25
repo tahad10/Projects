@@ -9,17 +9,53 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Dice App">
+    <meta name="theme-color" content="#121826">
 
     <link rel="apple-touch-icon" href="LogoApp.png">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JunusErgin/fast-ui@latest/style.css">
     <style>
-        body {
+        /* WICHTIG: Diese Styles verhindern das weiße Flackern beim Start */
+        html, body {
+            background-color: #121826 !important;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            color: white;
+            font-family: -apple-system, system-ui, sans-serif;
+            touch-action: none; 
             height: 85vh;
+        }
+
+        /* Splash Screen Style */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #121826;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loading-logo {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
+            animation: pulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.08); opacity: 1; }
         }
 
         header {
@@ -67,10 +103,17 @@
     </style>
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <img src="LogoTD.png" alt="Logo" class="loading-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/115/115933.png'">
+        <p class="text-white/40 text-xs tracking-[0.3em] uppercase"></p>
+    </div>
+
     <header>
         <img src="LogoTD.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
         <span>Dice</span>
     </header>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="skript.js"></script>
 </body>

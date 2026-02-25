@@ -119,4 +119,15 @@ function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
+
+ window.requestAnimationFrame(() => {
+    setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+        if(splash) {
+            splash.style.opacity = '0';
+                setTimeout(() => splash.remove(), 600);
+        }
+    }, 800);
+});
+
 animate();
