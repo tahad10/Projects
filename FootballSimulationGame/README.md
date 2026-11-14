@@ -1,5 +1,5 @@
 # ⚽ Football Simulation
-
+ 
 An interactive and automated football match simulation built with HTML5 Canvas. Watch a high-speed match between Real Madrid and Barcelona with dynamic physics, goal celebrations, and a full 90-minute game clock.
 
 ## ✨ Features
