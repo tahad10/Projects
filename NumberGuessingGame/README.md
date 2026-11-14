@@ -17,7 +17,7 @@ Test your luck and logic here:
 
 ## 🛠 Technologies
 
-- HTML – Semantic structure.
+- HTML – Semantic structure
 - CSS – Modern styling and responsive glassmorphism layout.
 - JavaScript – Game logic, state management, and DOM manipulation.
 - JS-Confetti – Visual celebration effects.
